@@ -40,5 +40,16 @@ namespace EntetyEntery.Controllers
             }
             return Ok(value);
         }
+        [HttpDelete]
+        public async ValueTask<IActionResult> DeleteUser(int id)
+        {
+            var user = await _context.Students.FirstOrDefaultAsync(x => x.Id == id);
+            if(user!=null)
+            {
+                _context.Students.Remove(user);
+                await _context.SaveChangesAsync();
+            }
+            return Ok(user);
+        }
     }
 }
