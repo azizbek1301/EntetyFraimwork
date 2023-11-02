@@ -16,10 +16,23 @@ namespace EntetyEntery.Controllers
             _context = dbContext;
         }
         [HttpGet]
-        public IActionResult GetAll()
+        public async ValueTask<IActionResult> GetAll()
         {
-            var value = _context.Students.ToList();
-            return Ok(value);
+            try
+            {
+                var value = _context.Students.AsNoTracking().ToListAsync();
+                if(value is not null)
+                {
+                    return Ok(value);
+                }
+                return NotFound("Ma'lumot topilmadi");
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
         [HttpPost]
         public async ValueTask<IActionResult> AdUser(Students student)
